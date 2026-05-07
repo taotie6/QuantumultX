@@ -231,6 +231,8 @@ if (isGetHeader) {
     if (account) {
       addAccountToHost(host, account); // 保存账户到站点
     }
+    // 清除失败标记（重新抓包说明已更新 CK）
+    clearAccountFailed(host, account);
   }
   const title = notifyTitleForHost(host, account);
   console.log(`[NewAPI] ${title} | 参数保存 | 已保存 ${Object.keys(picked).length} 个字段`);
