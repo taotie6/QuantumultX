@@ -12,9 +12,9 @@ QuantumultX/
 ├── LICENSE                            # 许可证
 ├── profile/
 │   └── QX_Config.conf                 # 主配置文件（推荐使用）
-├── scripts/                           # 自动化脚本
+├── scripts/                           # 脚本仓库
 │   ├── NewAPI.js                      # NewAPI 中转站通用签到
-│   ├── V2EX.js                        # V2EX 每日签到
+│   ├── V2EX.js                        # V2EX 签到
 │   ├── CDRail.js                      # 成都地铁签到
 │   ├── cytq.js
 │   ├── Nicegram.js

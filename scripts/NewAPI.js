@@ -17,6 +17,7 @@ hostname = %APPEND% *
 
 const HEADER_KEY_PREFIX = "UniversalCheckin_Headers";
 const HOSTS_LIST_KEY = "UniversalCheckin_HostsList";
+const FAILED_KEY_PREFIX = "UniversalCheckin_Failed";
 const isGetHeader = typeof $request !== "undefined";
 
 const NEED_KEYS = [
@@ -94,6 +95,41 @@ function getAccountsForHost(host) {
     return [""];
   }
 }
+
+function isAccountFailed(host, account) {
+  try {
+    if (typeof $prefs === "undefined") return false;
+    const failedKey = `${FAILED_KEY_PREFIX}:${host}:${account}`;
+    const failed = $prefs.valueForKey(failedKey);
+    return failed === "true";
+  } catch (e) {
+    console.log("[NewAPI] Error checking failed status:", e);
+    return false;
+  }
+}
+
+function markAccountFailed(host, account) {
+  try {
+    if (typeof $prefs === "undefined") return;
+    const failedKey = `${FAILED_KEY_PREFIX}:${host}:${account}`;
+    $prefs.setValueForKey("true", failedKey);
+    console.log(`[NewAPI] Marked ${notifyTitleForHost(host, account)} as failed`);
+  } catch (e) {
+    console.log("[NewAPI] Error marking account as failed:", e);
+  }
+}
+
+function clearAccountFailed(host, account) {
+  try {
+    if (typeof $prefs === "undefined") return;
+    const failedKey = `${FAILED_KEY_PREFIX}:${host}:${account}`;
+    $prefs.removeValueForKey(failedKey);
+    console.log(`[NewAPI] Cleared failed status for ${notifyTitleForHost(host, account)}`);
+  } catch (e) {
+    console.log("[NewAPI] Error clearing failed status:", e);
+  }
+}
+
 
 function pickNeedHeaders(src = {}) {
   const dst = {};
@@ -213,6 +249,12 @@ if (isGetHeader) {
   }
 
   const doCheckin = (host, account = "") => {
+    // 检查是否已标记失败，失败的账户不再执行
+    if (isAccountFailed(host, account)) {
+      console.log(`[NewAPI] ${notifyTitleForHost(host, account)} 已标记失败，跳过执行`);
+      return Promise.resolve();
+    }
+
     const key = headerKeyForHost(host, account);
     const raw = $prefs.valueForKey(key);
     if (!raw) {
@@ -256,30 +298,36 @@ if (isGetHeader) {
           obj?.data?.quota_awarded !== undefined ? String(obj.data.quota_awarded) : "";
 
         const title = notifyTitleForHost(host, account);
-        const statusText = success ? "✓成功" : status >= 200 && status < 300 ? "✗失败" : `✗异常(${status})`;
-        const logMsg = `[NewAPI] ${title} | ${statusText} | ${checkinDate ? `${checkinDate}` : ""}${quotaAwarded ? ` | 获得:${quotaAwarded}` : ""}${message ? ` | ${message}` : ""}`.trim();
-        console.log(logMsg);
+        
         if (status === 401 || status === 403) {
-          $notify(title, "登录失效", `HTTP ${status}，请重新抓包保存 Cookie。\n${message || body}`);
+          // 登录失效，标记该账户为失败
+          markAccountFailed(host, account);
+          $notify(title, "登录失效 ✗", `已停止执行，请重新抓包保存 Cookie`);
         } else if (status >= 200 && status < 300) {
           if (success) {
+            // 成功时清除失败标记（如果存在）
+            clearAccountFailed(host, account);
             let content = checkinDate ? `日期：${checkinDate}` : "签到成功";
             if (quotaAwarded) {
               content += `\n获得：${quotaAwarded}`;
             }
-            $notify(title, "签到成功", content);
+            $notify(title, "✓ 签到成功", content);
           } else {
-            $notify(title, "签到失败", message || body || `HTTP ${status}`);
+            // 业务逻辑失败，标记为失败
+            markAccountFailed(host, account);
+            $notify(title, "✗ 签到失败", message || body || `HTTP ${status}`);
           }
         } else {
-          $notify(title, `接口异常 ${status}`, message || body);
+          // 其他异常，标记为失败
+          markAccountFailed(host, account);
+          $notify(title, `✗ 接口异常 ${status}`, message || body);
         }
       },
       (reason) => {
         const err = reason?.error ? String(reason.error) : String(reason || "");
         const title = notifyTitleForHost(host, account);
         console.log(`[NewAPI] ${title} | 网络错误 | ${err}`);
-        $notify(title, "网络错误", err);
+        $notify(title, "✗ 网络错误", err);
       }
     );
   };
