@@ -4,10 +4,10 @@
 使用说明：先访问中国移动签到页面保存 Cookie，再由定时任务自动签到领奖。
 
 [rewrite_local]
-^https?:\/\/wx\.10086\.cn\/qwhdhub\/ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/CMCC.js
+^https?:\/\/wx\.10086\.cn\/qwhdhub\/ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/cmcc.js
 
 [task_local]
-35 8 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/CMCC.js, tag=中国移动签到, enabled=true
+35 8 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/cmcc.js, tag=中国移动签到, enabled=true
 
 [MITM]
 hostname = %APPEND% wx.10086.cn

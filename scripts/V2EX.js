@@ -6,10 +6,10 @@
 使用说明：先访问 V2EX 个人主页保存 Cookie，再由定时任务自动签到。
 
 [rewrite_local]
-^https:\/\/www\.v2ex\.com\/ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/V2EX.js
+^https:\/\/www\.v2ex\.com\/ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/v2ex.js
 
 [task_local]
-10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/V2EX.js, tag=V2EX 每日签到, enabled=true
+10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/v2ex.js, tag=V2EX 每日签到, enabled=true
 
 [MITM]
 hostname = %APPEND% www.v2ex.com

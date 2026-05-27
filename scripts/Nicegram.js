@@ -3,7 +3,7 @@
 更新时间：2024-06-08
 *******************************
 [rewrite_local]
-https://nicegram.cloud/api/v6/user/info url script-response-body https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/Nicegram.js
+https://nicegram.cloud/api/v6/user/info url script-response-body https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/nicegram.js
 
 [mitm] 
 hostname = nicegram.cloud

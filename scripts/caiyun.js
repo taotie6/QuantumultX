@@ -3,7 +3,7 @@
 更新时间：2024-06-10
 *******************************
 [rewrite_local]
-^https:\/\/biz\.cyapi\.cn\/ url script-response-body https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/cytq.js
+^https:\/\/biz\.cyapi\.cn\/ url script-response-body https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/caiyun.js
 [mitm] 
 hostname = biz.cyapi.cn
 *******************************/

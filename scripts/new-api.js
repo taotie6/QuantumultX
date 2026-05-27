@@ -4,12 +4,12 @@
 使用说明：先抓包一次保存 Cookie，再由定时任务自动签到（按域名分别保存，多站点可共用同一脚本）。
 
 [rewrite_local]
-^https:\/\/.*\/api\/user\/self$ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/NewAPI.js
+^https:\/\/.*\/api\/user\/self$ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/new-api.js
 
 [task_local]
-10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/NewAPI.js, tag=通用签到(NewAPI), enabled=true
+10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/new-api.js, tag=通用签到(NewAPI), enabled=true
 ; 如需只跑单站点（可选），替换 example.com 为实际域名
-; 10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/NewAPI.js, tag=单站点签到, enabled=true, argument=host=example.com
+; 10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/new-api.js, tag=单站点签到, enabled=true, argument=host=example.com
 
 [MITM]
 hostname = %APPEND% *

@@ -5,10 +5,10 @@
 说明：打开成都地铁-我的-会员中心 点击签到按钮 手动签到一次 脚本将自动保存用户信息
 *******************************
 [rewrite_local]
-^https:\/\/app\.cdmetro\.chengdurail\.cn\/platform\/users\/user\/sign-in-integral(-day)?(\\?.*)?$ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/CDRail.js
+^https:\/\/app\.cdmetro\.chengdurail\.cn\/platform\/users\/user\/sign-in-integral(-day)?(\\?.*)?$ url script-request-header https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/cd-rail.js
 
 [task_local]
-10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/CDRail.js, tag=成都地铁签到, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/doraemon/Doraemon-1022.png, enabled=true
+10 9 * * * https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/scripts/cd-rail.js, tag=成都地铁签到, img-url=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/doraemon/Doraemon-1022.png, enabled=true
 
 [MITM]
 hostname = app.cdmetro.chengdurail.cn
