@@ -28,7 +28,9 @@ QuantumultX/
     ├── set.png                        # 仓库头像
     ├── Curtin.jpg
     ├── lightning-full.png
-    └── homepage*.jpeg
+    ├── home1.jpeg                     # 首页预览
+    ├── home2.jpeg                     # 策略列表预览
+    └── rewrite.jpeg                   # 重写规则预览
 ```
 
 ## ✨ 主要特性
@@ -56,6 +58,16 @@ QuantumultX/
 - 闲鱼、小红书、高德地图去广告
 - Reddit 功能增强
 - Spotify 增强
+
+## 📱 配置预览
+
+| 首页预览 | 策略列表 |
+| :---: | :---: |
+| <img src="./icons/home1.jpeg" width="300" /> | <img src="./icons/home2.jpeg" width="300" /> |
+
+| 重写规则 |
+| :---: |
+| <img src="./icons/rewrite.jpeg" width="300" /> |
 
 ## 🚀 快速开始
 
