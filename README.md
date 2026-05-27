@@ -8,6 +8,7 @@
 QuantumultX/
 ├── README.md                          # 本文件
 ├── LICENSE                            # MIT 许可证
+├── AGENTS.md                          # 开发准则
 ├── profile/
 │   └── QX_Config.conf                 # 主配置文件
 ├── scripts/                           # 自动化脚本
@@ -25,9 +26,10 @@ QuantumultX/
 │   ├── AI.list                        # AI 服务规则
 │   └── AppleIntelligence.list         # 苹果智能服务规则
 └── icons/                             # 策略图标
-    ├── Curtin.jpg                     # 仓库头像
-    ├── set.png
-    └── lightning-full.png
+    ├── set.png                        # 仓库头像
+    ├── Curtin.jpg
+    ├── lightning-full.png
+    └── homepage*.jpeg
 ```
 
 ## ✨ 主要特性
@@ -36,18 +38,25 @@ QuantumultX/
 - **智能分流**：国内直连、国外代理、流媒体、社交等智能分类
 - **地区策略**：香港、台湾、日本、新加坡、美国、韩国等节点智能分配
 - **策略优选**：支持手动选择、自动延迟测试、目标地址哈希
-- **DNS 优化**：预配置多个高效 DNS 解析服务
+- **DNS 优化**：预配置多个高效 DNS 解析服务，支持 DoH3
+- **IPv6 禁用**：默认禁用 IPv6 避免泄漏
 
 ### 📋 规则集成
 - **国内规则**：国内 CDN、金融、社交直连
-- **国际规则**：Google、Apple、Microsoft、GitHub、PayPal
-- **流媒体**：Netflix、YouTube、Spotify、BiliBili
+- **国际规则**：Google、Apple、PayPal
+- **流媒体**：Netflix、YouTube、Spotify
+- **AI 服务**：OpenAI、Claude、Gemini、Copilot、Perplexity 等全覆盖
 - **广告拦截**：多个高质量广告过滤规则
-- **AI 服务**：OpenAI、Claude、Gemini、Copilot 等全覆盖
 
 ### 📜 自动化脚本
 - **签到类**：NewAPI 通用签到、V2EX、成都地铁、中国移动、NodeSeek
 - **解锁类**：布丁锁屏、彩云天气、Nicegram、DreamFace、Notability
+
+### 🔄 重写规则
+- YouTube 字幕/去广告
+- 闲鱼、小红书、高德地图去广告
+- Reddit 功能增强
+- Spotify 增强
 
 ## 🚀 快速开始
 
@@ -74,7 +83,7 @@ QuantumultX/
 
 ### 4. 启用脚本
 
-编辑 `[task_local]` 部分启用需要的自动签到脚本。
+编辑 `[task_local]` 部分启用需要的自动签到脚本（默认 disabled）。
 
 ## 📜 脚本使用说明
 
@@ -98,6 +107,22 @@ QuantumultX/
 | `dreamface.js` | DreamFace 解锁 | 需要 MITM |
 | `notability.js` | Notability 解锁 | 需要 MITM |
 
+## 🌐 策略说明
+
+| 策略 | 用途 | 节点选择 |
+|------|------|----------|
+| Apple | Apple 服务 | 直连/代理 |
+| AI | AI 服务 (ChatGPT/Claude/Gemini) | 美国/日本/新加坡 |
+| Google | Google 服务 | 新加坡/美国 |
+| YouTube | YouTube | 香港/台湾/日本/韩国/新加坡/美国 |
+| X | Twitter/X | 香港/台湾/日本/韩国/新加坡/美国 |
+| Telegram | Telegram | 香港/台湾/日本/新加坡/美国 |
+| Netflix | Netflix | 手动选择/香港/台湾/日本/韩国/新加坡/美国 |
+| Spotify | Spotify | 新加坡/香港/日本/美国 |
+| PayPal | PayPal | 美国/代理/直连 |
+| GlobalMedia | 全球流媒体 | 代理/直连/手动 |
+| Gamer | 游戏平台 | 代理/直连/香港/美国/新加坡 |
+
 ## 🔐 隐私与安全
 
 本仓库中的 `QX_Config.conf` 为公开配置：
@@ -111,6 +136,8 @@ QuantumultX/
 - [Quantumult X 官方网站](https://quantumultx.com)
 - [iOS 规则脚本库 - blackmatrix7](https://github.com/blackmatrix7/ios_rule_script)
 - [资源解析与脚本 - KOP-XIAO](https://github.com/KOP-XIAO/QuantumultX)
+- [广告规则 - AWAvenue](https://github.com/TG-Twilight/AWAvenue-Ads-Rule)
+- [重写规则 - ddgksf2013](https://github.com/ddgksf2013/Rewrite)
 
 欢迎提交 Issue 和 Pull Request！
 
