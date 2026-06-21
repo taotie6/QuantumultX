@@ -1,12 +1,12 @@
 # Quantumult X 配置库
 
-Quantumult X 配置文件集合，脚本已迁移至 [Scripthub](https://github.com/curtinp118/Scripthub) 统一管理。
+Quantumult X 配置文件集合。自维护脚本发布在 [taotie6/scripts](https://github.com/taotie6/scripts)，本仓库通过 `.conf` 文件远程引用；尚未迁移的历史脚本保留原上游地址。
 
 ## 📱 配置预览
 
 | 首页预览 | 策略列表 | 重写规则 |
 | :---: | :---: | :---: |
-| <img src="https://cdn.jsdelivr.net/gh/curtinp118/QuantumultX@main/icons/home1.jpeg" width="280" /> | <img src="https://cdn.jsdelivr.net/gh/curtinp118/QuantumultX@main/icons/home2.jpeg" width="280" /> | <img src="https://cdn.jsdelivr.net/gh/curtinp118/QuantumultX@main/icons/rewrite.jpeg" width="280" /> |
+| <img src="https://cdn.jsdelivr.net/gh/taotie6/QuantumultX@main/icons/home1.jpeg" width="280" /> | <img src="https://cdn.jsdelivr.net/gh/taotie6/QuantumultX@main/icons/home2.jpeg" width="280" /> | <img src="https://cdn.jsdelivr.net/gh/taotie6/QuantumultX@main/icons/rewrite.jpeg" width="280" /> |
 
 ## 📁 仓库结构
 
@@ -16,7 +16,7 @@ QuantumultX/
 ├── LICENSE                            # MIT 许可证
 ├── profile/
 │   └── QX_Config.conf                 # 主配置文件
-├── scripts/                           # 脚本配置（远程引用 Scripthub）
+├── scripts/                           # 脚本配置（引用 taotie6/scripts 或上游脚本源）
 │   ├── glados.conf                    # GLaDOS / Railgun 签到
 │   ├── v2ex.conf                      # V2EX 每日签到
 │   ├── new-api.conf                   # NewAPI 通用签到
@@ -27,14 +27,17 @@ QuantumultX/
 │   ├── caiyun.conf                    # 彩云天气解锁
 │   ├── nicegram.conf                  # Nicegram 解锁
 │   ├── dreamface.conf                 # DreamFace 解锁
-│   └── notability.conf                # Notability 解锁
+│   ├── notability.conf                # Notability 解锁
+│   └── banana-travelsim.conf          # Banana Travel SIM 流量查询
 ├── rules/                             # 本地规则文件
 │   ├── AI.list                        # AI 服务规则
-│   └── AppleIntelligence.list         # 苹果智能服务规则
+│   ├── AppleIntelligence.list         # 苹果智能服务规则
+│   ├── dandan.list                    # 蛋蛋不语规则
+│   └── Longbridge.list                # 长桥证券代理规则
 └── icons/                             # 策略图标
 ```
 
-> 脚本统一在 [curtinp118/Scripthub](https://github.com/curtinp118/Scripthub) 管理，本仓库通过 `.conf` 文件远程引用。
+> taotie6 自维护脚本统一发布在 [taotie6/scripts](https://github.com/taotie6/scripts)。未迁移到该仓库的历史脚本仍保留原上游 raw 地址，避免配置指向不存在的脚本文件。
 
 ## ✨ 主要特性
 
@@ -50,6 +53,7 @@ QuantumultX/
 - **国际规则**：Google、Apple、PayPal
 - **流媒体**：Netflix、YouTube、Spotify
 - **AI 服务**：OpenAI、Claude、Gemini、Copilot、Perplexity 等全覆盖
+- **金融服务**：长桥证券代理分流，国内银行直连
 - **广告拦截**：多个高质量广告过滤规则
 
 ### 🔄 重写规则
@@ -60,7 +64,13 @@ QuantumultX/
 
 ## 📜 脚本列表
 
-所有脚本统一在 [Scripthub](https://github.com/curtinp118/Scripthub) 管理，支持 QX / Loon / Surge 三端。
+taotie6 自维护脚本发布在 [taotie6/scripts](https://github.com/taotie6/scripts)。未迁移脚本继续引用原上游地址。
+
+### taotie6 自维护脚本
+
+| 脚本 | 功能 | 使用方法 |
+|------|------|----------|
+| `banana-travelsim.js` | Banana Travel SIM 多卡流量查询 | 先在 BoxJS 配置 SIM 卡信息，再导入 `scripts/banana-travelsim.conf`；脚本地址为 `https://raw.githubusercontent.com/taotie6/scripts/main/scripts/banana-travelsim.js` |
 
 ### 签到类
 
@@ -92,7 +102,7 @@ QuantumultX/
 2. 选择「下载」或「从文件导入」
 3. 复制以下地址：
    ```
-   https://raw.githubusercontent.com/curtinp118/QuantumultX/refs/heads/main/profile/QX_Config.conf
+   https://raw.githubusercontent.com/taotie6/QuantumultX/main/profile/QX_Config.conf
    ```
 
 ### 2. 配置订阅
@@ -136,7 +146,7 @@ QuantumultX/
 
 ## 🤝 相关资源
 
-- [Scripthub 脚本库](https://github.com/curtinp118/Scripthub) — 统一脚本管理
+- [taotie6/scripts 脚本库](https://github.com/taotie6/scripts) — 自维护脚本发布
 - [Loon 配置库](https://github.com/curtinp118/Loon) — Loon 配置
 - [Quantumult X 官方网站](https://quantumultx.com)
 - [iOS 规则脚本库 - blackmatrix7](https://github.com/blackmatrix7/ios_rule_script)
@@ -156,4 +166,4 @@ QuantumultX/
 
 ---
 
-**最后更新**: 2026-05-31
+**最后更新**: 2026-06-21
