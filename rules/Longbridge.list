@@ -1,0 +1,18 @@
+# 长桥证券 / Longbridge & LongPort
+
+# 官方网站与主域名
+HOST-SUFFIX,longbridge.com,no-policy
+HOST-SUFFIX,longbridgeapp.com,no-policy
+HOST-SUFFIX,longportapp.com,no-policy
+HOST-SUFFIX,longbridge.sg,no-policy
+HOST-SUFFIX,longbridge.hk,no-policy
+HOST-SUFFIX,longbridge.global,no-policy
+
+# 后端 API、行情数据及 OpenAPI 域名
+HOST-SUFFIX,longbridge-inc.com,no-policy
+HOST-SUFFIX,lbtech.hk,no-policy
+HOST-SUFFIX,longportwhale.com,no-policy
+
+# 备用关键字匹配（用于拦截可能遗漏的子域名）
+HOST-KEYWORD,longbridge,no-policy
+HOST-KEYWORD,longport,no-policy
