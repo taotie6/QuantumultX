@@ -1,6 +1,11 @@
 # Quantumult X 配置库
 
-Quantumult X 配置文件集合。自维护脚本发布在 [taotie6/scripts](https://github.com/taotie6/scripts)，本仓库通过 `.conf` 文件远程引用；尚未迁移的历史脚本保留原上游地址。
+Quantumult X 完整配置文件集合，包含智能分流规则、重写规则和自动化脚本模块。
+
+**脚本来源说明**：
+- taotie6 自维护脚本发布在 [taotie6/scripts](https://github.com/taotie6/scripts)，本仓库通过 `.conf` 文件远程引用
+- 历史脚本暂保留原上游地址（curtinp118/Scripthub），待迁移后统一指向 taotie6 仓库
+- 第三方规则和工具（blackmatrix7、KOP-XIAO、ddgksf2013 等）保持原作者地址
 
 ## 📱 配置预览
 
@@ -36,8 +41,6 @@ QuantumultX/
 │   └── Longbridge.list                # 长桥证券代理规则
 └── icons/                             # 策略图标
 ```
-
-> taotie6 自维护脚本统一发布在 [taotie6/scripts](https://github.com/taotie6/scripts)。未迁移到该仓库的历史脚本仍保留原上游 raw 地址，避免配置指向不存在的脚本文件。
 
 ## ✨ 主要特性
 
