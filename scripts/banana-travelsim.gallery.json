@@ -1,0 +1,9 @@
+{
+  "name": "Banana Travel SIM",
+  "task": [
+    {
+      "config": "30 8 * * * https://raw.githubusercontent.com/taotie6/scripts/main/scripts/banana-travelsim.js, tag=Banana Travel SIM 流量查询, enabled=true, img-url=antenna.radiowaves.left.and.right.circle.system"
+    }
+  ],
+  "description": "每天 08:30 查询 Banana Travel SIM 多张 SIM/eSIM 流量并合并通知。使用前请先在 BoxJS 导入 banana-travelsim.boxjs.json 并配置 SIM 卡信息。"
+}

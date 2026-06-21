@@ -33,7 +33,8 @@ QuantumultX/
 │   ├── nicegram.conf                  # Nicegram 解锁
 │   ├── dreamface.conf                 # DreamFace 解锁
 │   ├── notability.conf                # Notability 解锁
-│   └── banana-travelsim.conf          # Banana Travel SIM 流量查询
+│   ├── banana-travelsim.conf          # Banana Travel SIM 流量查询任务片段
+│   └── banana-travelsim.gallery.json  # Banana Travel SIM Quantumult X 任务库
 ├── rules/                             # 本地规则文件
 │   ├── AI.list                        # AI 服务规则
 │   ├── AppleIntelligence.list         # 苹果智能服务规则
@@ -73,7 +74,15 @@ taotie6 自维护脚本发布在 [taotie6/scripts](https://github.com/taotie6/sc
 
 | 脚本 | 功能 | 使用方法 |
 |------|------|----------|
-| `banana-travelsim.js` | Banana Travel SIM 多卡流量查询 | 1. 导入模块配置 `scripts/banana-travelsim.conf`<br>2. 在 BoxJS 中导入订阅 `https://raw.githubusercontent.com/taotie6/scripts/main/boxjs/banana-travelsim.boxjs.json`<br>3. 配置 SIM 卡信息后运行 |
+| `banana-travelsim.js` | Banana Travel SIM 多卡流量查询 | 1. 在 Quantumult X 任务库中添加 `https://raw.githubusercontent.com/taotie6/QuantumultX/main/scripts/banana-travelsim.gallery.json`<br>2. 在 BoxJS 中导入订阅 `https://raw.githubusercontent.com/taotie6/scripts/main/boxjs/banana-travelsim.boxjs.json`<br>3. 配置 SIM 卡信息后运行 |
+
+> `scripts/banana-travelsim.conf` 是 `[task_local]` 任务片段，不能直接作为远程资源或任务库 URL 加入 Quantumult X。如果提示“非法”，请改用上面的 `banana-travelsim.gallery.json`；或者手动复制 `.conf` 中的任务行到主配置的 `[task_local]` 段。
+
+Quantumult X 可直接打开任务库添加链接：
+
+```text
+quantumult-x:///ui?module=gallery&type=task&action=add&content=%5B%22https%3A%2F%2Fraw.githubusercontent.com%2Ftaotie6%2FQuantumultX%2Fmain%2Fscripts%2Fbanana-travelsim.gallery.json%22%5D
+```
 
 ### 签到类
 
@@ -122,6 +131,37 @@ taotie6 自维护脚本发布在 [taotie6/scripts](https://github.com/taotie6/sc
 ### 4. 启用脚本
 
 编辑 `[task_local]` 部分启用需要的自动签到脚本（默认 disabled）。
+
+## 🔄 配置更新
+
+Quantumult X 的「下载配置」主要用于首次导入或重新覆盖整份配置，不提供类似 Clash 的完整配置更新按钮。更新时请区分两种情况：
+
+### 日常更新：刷新远程资源
+
+本配置已将节点订阅、分流规则、重写规则等高频变化内容放在远程资源中：
+
+- `[server_remote]`：代理节点订阅
+- `[filter_remote]`：远程分流规则
+- `[rewrite_remote]`：远程重写规则
+
+这些资源会按配置中的 `update-interval` 自动更新。需要手动刷新时，在 Quantumult X 主界面长按右下角圆形按钮，然后点击左侧刷新按钮，即可更新远程节点、分流和重写资源。
+
+日常使用优先采用这种方式，不需要重新覆盖 `QX_Config.conf`。
+
+### 基础配置更新：重新下载覆盖
+
+如果本仓库更新了 `profile/QX_Config.conf` 的基础结构，例如策略组、DNS、MITM、远程资源入口等，需要重新下载完整配置：
+
+1. 先在 Quantumult X 中导出或备份当前配置。
+2. 打开「配置文件」中的「下载」。
+3. 粘贴以下地址：
+   ```
+   https://raw.githubusercontent.com/taotie6/QuantumultX/main/profile/QX_Config.conf
+   ```
+4. 确认覆盖导入。
+5. 重新填写自己的 `[server_remote]` 机场订阅链接，并恢复个人本地修改。
+
+覆盖导入会替换当前配置，可能导致个人订阅、手动规则、策略组调整等本地修改丢失。除非需要同步基础配置结构，否则不要频繁覆盖整份配置。
 
 ## 🌐 策略说明
 
