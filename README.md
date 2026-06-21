@@ -70,7 +70,7 @@ taotie6 自维护脚本发布在 [taotie6/scripts](https://github.com/taotie6/sc
 
 | 脚本 | 功能 | 使用方法 |
 |------|------|----------|
-| `banana-travelsim.js` | Banana Travel SIM 多卡流量查询 | 先在 BoxJS 配置 SIM 卡信息，再导入 `scripts/banana-travelsim.conf`；脚本地址为 `https://raw.githubusercontent.com/taotie6/scripts/main/scripts/banana-travelsim.js` |
+| `banana-travelsim.js` | Banana Travel SIM 多卡流量查询 | 先导入 BoxJS 配置 `https://raw.githubusercontent.com/taotie6/scripts/main/boxjs/banana-travelsim.boxjs.json`，再导入 `scripts/banana-travelsim.conf`；脚本地址为 `https://raw.githubusercontent.com/taotie6/scripts/main/scripts/banana-travelsim.js` |
 
 ### 签到类
 
