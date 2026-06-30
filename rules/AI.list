@@ -25,12 +25,25 @@ HOST-SUFFIX,oaistatic.com,no-policy
 HOST-SUFFIX,oaiusercontent.com,no-policy
 HOST-SUFFIX,sora.com,no-policy
 HOST-SUFFIX,livekit.cloud,no-policy
+HOST-SUFFIX,featuregates.org,no-policy
+HOST-SUFFIX,workos.com,no-policy
+HOST-SUFFIX,workoscdn.com,no-policy
+HOST-SUFFIX,openaimerge.com,no-policy
+HOST-SUFFIX,prodregistryv2.org,no-policy
+HOST-SUFFIX,featureassets.org,no-policy
+HOST-SUFFIX,browser-intake-datadoghq.com,no-policy
+HOST-SUFFIX,ingest.sentry.io,no-policy
+HOST-SUFFIX,openaiapi-site.azureedge.net,no-policy
+HOST-SUFFIX,cdn.oaistatic.com,no-policy
+HOST-SUFFIX,chat.openai.com,no-policy
 
 # ===== Anthropic / Claude =====
 HOST-SUFFIX,anthropic.com,no-policy
 HOST-SUFFIX,claude.ai,no-policy
 HOST-SUFFIX,claude.com,no-policy
 HOST-SUFFIX,claudeusercontent.com,no-policy
+HOST-SUFFIX,anthropicusercontent.com,no-policy
+HOST-SUFFIX,cdn.claude.ai,no-policy
 
 # ===== Google AI（Gemini / NotebookLM）=====
 HOST-SUFFIX,ai.google,no-policy
@@ -46,6 +59,11 @@ HOST-SUFFIX,deepmind.com,no-policy
 HOST-SUFFIX,deepmind.google,no-policy
 HOST-SUFFIX,generativeai.google,no-policy
 HOST-SUFFIX,colab.google.com,no-policy
+HOST-SUFFIX,aiplatform.googleapis.com,no-policy
+HOST-SUFFIX,vertexai.googleapis.com,no-policy
+HOST-SUFFIX,ml.googleapis.com,no-policy
+HOST-SUFFIX,generativelanguage.googleapis.com,no-policy
+HOST-SUFFIX,googleapis.com,no-policy
 
 # ===== Microsoft Copilot =====
 HOST,copilot.microsoft.com,no-policy
@@ -56,6 +74,9 @@ HOST,r.bing.com,no-policy
 HOST,sydney.bing.com,no-policy
 HOST,services.bingapis.com,no-policy
 HOST,api.msn.com,no-policy
+HOST-SUFFIX,copilot.cloud.microsoft,no-policy
+HOST-SUFFIX,bing.com,no-policy
+HOST-SUFFIX,microsoft.com,no-policy
 
 # ===== Perplexity =====
 HOST-SUFFIX,perplexity.ai,no-policy
@@ -69,6 +90,8 @@ HOST-SUFFIX,poecdn.net,no-policy
 # ===== xAI / Grok =====
 HOST-SUFFIX,x.ai,no-policy
 HOST-SUFFIX,grok.com,no-policy
+HOST-SUFFIX,x.com,no-policy
+HOST-SUFFIX,twitter.com,no-policy
 
 # ===== Character.ai =====
 HOST-SUFFIX,character.ai,no-policy
@@ -105,10 +128,15 @@ HOST-SUFFIX,githubcopilot.com,no-policy
 HOST,api.githubcopilot.com,no-policy
 HOST,api.github.com,no-policy
 HOST,github.githubassets.com,no-policy
+HOST-SUFFIX,githubusercontent.com,no-policy
+HOST-SUFFIX,githubassets.com,no-policy
+HOST-SUFFIX,github.com,no-policy
 
 # ===== 代码 / 开发 AI =====
 HOST-SUFFIX,cursor.sh,no-policy
 HOST-SUFFIX,cursor.com,no-policy
+HOST-SUFFIX,cursorapi.com,no-policy
+HOST-SUFFIX,cursor-cdn.com,no-policy
 HOST-SUFFIX,codeium.com,no-policy
 HOST-SUFFIX,windsurf.com,no-policy
 HOST-SUFFIX,replit.com,no-policy
