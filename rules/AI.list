@@ -10,6 +10,8 @@ HOST,guzzoni.apple.com,no-policy
 HOST,smoot.apple.com,no-policy
 HOST,api.apple-cloudkit.com,no-policy
 HOST,blackbird.apple.com,no-policy
+HOST-SUFFIX,apple-relay.apple.com,no-policy
+HOST-SUFFIX,apple.com,no-policy
 
 # ===== 通用（AI 服务共用的基础设施） =====
 HOST,api.statsig.com,no-policy
