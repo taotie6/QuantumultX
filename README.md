@@ -7,6 +7,18 @@ Quantumult X 完整配置文件集合，包含智能分流规则、重写规则�
 - 历史脚本暂保留原上游地址（curtinp118/Scripthub），待迁移后统一指向 taotie6 仓库
 - 第三方规则和工具（blackmatrix7、KOP-XIAO、ddgksf2013 等）保持原作者地址
 
+## 🧱 三层维护架构
+
+本仓库采用「上游只读跟踪 + 个人配置独立维护 + 自动化检查」的模式，不镜像上游规则库：
+
+| 层 | 仓库 | 职责 | 维护方式 |
+| --- | --- | --- | --- |
+| 上游 | [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script) | 唯一规则来源，只读依赖 | 上游维护，本仓库直接引用 `master` 原始地址，更新自动生效 |
+| Fork | 个人 fork（可选） | 跟踪上游变化、审核更新、提交修复 | 每周同步一次（GitHub `Sync fork` 或 `gh repo sync`），不参与日常分发 |
+| 本仓库 | taotie6/QuantumultX | 配置模板、策略组、个人例外规则、DNS、验证脚本、变更记录 | 日常唯一需要手工维护的仓库 |
+
+注意：上游仓库采用 GPL-2.0 许可证并有资源转载声明，**请勿把上游规则文件批量复制进本仓库**；个人例外规则放在 `rules/` 与 `config/filter_local.conf`，其余一律引用上游地址。
+
 ## 📱 配置预览
 
 | 首页预览 | 策略列表 | 重写规则 |
@@ -19,23 +31,23 @@ Quantumult X 完整配置文件集合，包含智能分流规则、重写规则�
 QuantumultX/
 ├── README.md                          # 本文件
 ├── LICENSE                            # MIT 许可证
+├── CHANGELOG.md                       # 配置变更日志 + 每周维护记录
 ├── profile/
-│   └── QX_Config.conf                 # 主配置文件
-├── scripts/                           # 脚本配置（引用 taotie6/scripts 或上游脚本源）
-│   ├── glados.conf                    # GLaDOS / Railgun 签到
-│   ├── v2ex.conf                      # V2EX 每日签到
-│   ├── new-api.conf                   # NewAPI 通用签到
-│   ├── cd-rail.conf                   # 成都地铁签到
-│   ├── cmcc.conf                      # 中国移动签到
-│   ├── nodeseek.conf                  # NodeSeek 论坛签到
-│   ├── buding.conf                    # 布丁锁屏解锁
-│   ├── caiyun.conf                    # 彩云天气解锁
-│   ├── nicegram.conf                  # Nicegram 解锁
-│   ├── dreamface.conf                 # DreamFace 解锁
-│   ├── notability.conf                # Notability 解锁
-│   ├── banana-travelsim.conf          # Banana Travel SIM 流量查询任务片段
-│   └── banana-travelsim.gallery.json  # Banana Travel SIM Quantumult X 任务库
-├── rules/                             # 本地规则文件
+│   └── QX_Config.conf                 # 主配置文件（对外导入地址）
+├── config/                            # 配置拆分维护源（QX 不支持 include，需手工同步到主配置）
+│   ├── quantumultx.conf.template      # 完整配置模板（占位符，无真实凭据）
+│   ├── policy.conf                    # [policy] 策略组维护源
+│   ├── filter_remote.conf             # [filter_remote] 远程规则维护源
+│   ├── filter_local.conf              # [filter_local] 个人例外规则维护源
+│   └── dns.conf                       # [dns] DNS 配置维护源
+├── checks/
+│   └── rule_urls.txt                  # 规则健康检查 URL 清单（35 项）
+├── scripts/
+│   ├── check_rules.py                 # 规则健康检查脚本
+│   └── *.conf                         # 脚本模块配置（引用 taotie6/scripts 或上游脚本源）
+├── .github/workflows/
+│   └── check-rules.yml                # 每周定时健康检查，失败自动建 Issue
+├── rules/                             # 自维护规则文件（经本仓库 raw 地址远程引用）
 │   ├── AI.list                        # AI 服务规则
 │   ├── AppleIntelligence.list         # 苹果智能服务规则
 │   ├── dandan.list                    # 蛋蛋不语规则
@@ -163,6 +175,42 @@ Quantumult X 的「下载配置」主要用于首次导入或重新覆盖整份�
 
 覆盖导入会替换当前配置，可能导致个人订阅、手动规则、策略组调整等本地修改丢失。除非需要同步基础配置结构，否则不要频繁覆盖整份配置。
 
+## 🧪 规则健康检查
+
+远程规则 URL 失效（上游文件移动、站点限制、格式变化）是最容易被忽略的故障。本仓库用 GitHub Actions 自动盯防：
+
+- **检查内容**：HTTP 200、内容非空、非 HTML 劫持页、按扩展名的简单格式校验（`.list` 校验分流规则语法，兼容 Surge 风格前缀；`.conf`/`.snippet` 校验重写语法）；连接级错误自动重试 2 次
+- **检查范围**：`checks/rule_urls.txt` 中的 35 项远程资源（分流规则、重写规则、任务脚本），与主配置引用保持同步
+- **运行节奏**：每周一 09:00（北京时间）自动运行；也可在 Actions 页面手动触发（`workflow_dispatch`）
+- **失败通知**：自动创建（或向已有未关闭 Issue 追加评论）`[自动化] 规则健康检查失败` Issue；GitHub 同时会向仓库所有者发送失败邮件
+- **权限**：仅使用最小权限 `GITHUB_TOKEN`（读内容 + 写 Issue），无跨仓库令牌
+
+本地手动运行：
+
+```bash
+python3 scripts/check_rules.py
+# 指定清单与超时
+python3 scripts/check_rules.py --file checks/rule_urls.txt --timeout 30
+```
+
+新增/删除远程资源时，记得同步修改 `checks/rule_urls.txt`。注意：检查通过只代表 URL 可用且格式正确，分流行为仍需在 Quantumult X 客户端验证。
+
+## 🧭 每周维护流程（约 5 分钟）
+
+1. **同步 Fork**（如有）：在 GitHub Fork 页面点 `Sync fork` → `Update branch`，或 `gh repo sync`
+2. **查看健康检查结果**：打开 Actions 页面确认「规则健康检查」是否通过；失败时按 Issue 提示处理
+3. **关注关键规则**：OpenAI、YouTube、Apple、Advertising、GlobalMedia 等实际使用的规则是否有破坏性变化（配置直接引用上游 `master` 时通常无需改动）
+4. **客户端验证**：在 Quantumult X 长按右下角按钮刷新远程资源，确认请求命中预期策略
+5. **记录**：在 [CHANGELOG.md](CHANGELOG.md) 的「维护记录」表格追加一行；如有结构性配置变更，写入日期条目并打 tag（如 `config-YYYY-MM-DD`）便于回滚
+
+## 🗺️ 演进路线
+
+- **第一阶段（已完成）**：本仓库保存配置模板与拆分维护源；Fork 只跟踪上游；每周人工同步 + 人工检查
+- **第二阶段（已完成）**：GitHub Actions 规则健康检查，失败自动通知
+- **第三阶段（按需）**：开始维护自己的规则分支后，再增加 Fork 自动同步、更新差异报告，审核通过后发布
+
+原则：不为维护配置引入过多的自动化系统；自动同步失败时不强制覆盖分支，保留人工回滚能力。
+
 ## 🌐 策略说明
 
 | 策略 | 用途 | 节点选择 |
@@ -181,11 +229,21 @@ Quantumult X 的「下载配置」主要用于首次导入或重新覆盖整份�
 
 ## 🔐 隐私与安全
 
-本仓库中的 `QX_Config.conf` 为公开配置：
+本仓库中的 `QX_Config.conf` 与 `config/quantumultx.conf.template` 为公开配置：
+
 - ✅ 所有规则和脚本链接都是公开的
-- ✅ MITM 证书信息已使用占位符替换
-- ✅ 个人订阅 Token 需自行添加
+- ✅ MITM 证书信息已使用占位符替换（`passphrase` / `p12` 仅保存在本地）
+- ✅ 机场订阅使用 `{{SUBSCRIPTION_URL}}` 占位符，个人订阅 Token 只保存在本地设备
 - ✅ Cookie 等敏感信息仅保存在本地
+- ✅ GitHub Actions 仅使用最小权限 `GITHUB_TOKEN`，未配置任何额外令牌
+
+安全红线：
+
+1. 不要将机场订阅 URL、密码、令牌或个人配置中的敏感信息提交到 Git
+2. 模板和占位符进仓库，实际配置留在本地
+3. 自动同步/检查失败时不要强制覆盖分支，先诊断再处理
+4. 结构性配置变更前保留可恢复版本（git tag），出现故障先回滚
+5. 只有确实需要跨仓库写入时才配置额外令牌，且优先最小权限
 
 ## 🤝 相关资源
 
@@ -209,4 +267,4 @@ Quantumult X 的「下载配置」主要用于首次导入或重新覆盖整份�
 
 ---
 
-**最后更新**: 2026-06-21
+**最后更新**: 2026-10-25

@@ -1,0 +1,79 @@
+# 规则健康检查工作流
+#
+# 功能：
+# - 每周一 09:00（北京时间）自动检查 checks/rule_urls.txt 中的远程资源
+# - 支持在 Actions 页面手动触发（workflow_dispatch）
+# - 检查失败时自动创建/追加 Issue 通知；GitHub 也会向仓库所有者发送失败邮件
+#
+# 权限：仅使用最小权限 GITHUB_TOKEN（读仓库内容 + 写 Issue），
+# 不配置任何跨仓库令牌。自动同步 Fork 属于第三阶段，见 README 演进路线。
+
+name: 规则健康检查
+
+on:
+  schedule:
+    # 每周一 01:00 UTC = 北京时间 09:00
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: 检查规则 URL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 配置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 运行规则健康检查
+        run: python3 scripts/check_rules.py
+
+  notify:
+    name: 失败时创建 Issue 通知
+    needs: check
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: 创建或更新失败 Issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          SERVER: ${{ github.server_url }}
+        run: |
+          TITLE="[自动化] 规则健康检查失败"
+          BODY="规则健康检查未通过，请查看运行详情并处理：
+
+          ${SERVER}/${REPO}/actions/runs/${RUN_ID}
+
+          常见原因：
+          - 上游规则文件移动或删除（404）
+          - 规则格式变化导致语法校验失败
+          - 第三方站点临时不可用
+
+          处理后请更新 checks/rule_urls.txt 或相关配置，并关闭本 Issue。
+          ---
+          *此 Issue 由 GitHub Actions 自动维护，请勿删除标题。*"
+
+          ISSUE_NUMBER=$(gh issue list --repo "$REPO" --state open \
+            --search "in:title is:issue 规则健康检查失败" \
+            --json number --jq '.[0].number')
+          if [ -n "$ISSUE_NUMBER" ]; then
+            echo "已存在未关闭的失败 Issue #$ISSUE_NUMBER，追加评论"
+            gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body "$BODY"
+          else
+            echo "创建新的失败 Issue"
+            gh issue create --repo "$REPO" --title "$TITLE" --body "$BODY"
+          fi

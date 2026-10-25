@@ -1,0 +1,56 @@
+# ============================================================
+# 规则健康检查 URL 清单
+# 更新日期：2026-10-25
+#
+# 用法：
+# - 每行一个 URL，以 # 开头的行和空行会被忽略
+# - 与 config/filter_remote.conf、[rewrite_remote]、[task_local]
+#   保持同步：配置里新增/删除远程资源时同步更新本清单
+# - 本地运行：python3 scripts/check_rules.py
+# - GitHub Actions 每周一 09:00（北京时间）自动检查，
+#   失败时自动创建 Issue 通知
+# ============================================================
+
+# ---- 远程分流规则 [filter_remote] ----
+# 上游 blackmatrix7（GPL-2.0，直接引用不复制）
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/China/China.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/WeChat/WeChat.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Microsoft/Microsoft.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/PayPal/PayPal.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GlobalMedia/GlobalMedia.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Steam/Steam.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Epic/Epic.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Sony/Sony.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Nintendo/Nintendo.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Global/Global.list
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list
+# 广告规则 AWAvenue
+https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list
+# 本仓库自维护规则（托管在本仓库 rules/ 目录）
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AI.list
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Longbridge.list
+
+# ---- 远程重写规则 [rewrite_remote] ----
+https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf
+https://raw.githubusercontent.com/ZenmoFeiShi/Qx/refs/heads/main/Yt-zh.snippet
+https://raw.githubusercontent.com/ZenmoFeiShi/Qx/refs/heads/main/Youtube.snippet
+https://raw.githubusercontent.com/ddgksf2013/Rewrite/refs/heads/master/AdBlock/GoofishAds.conf
+https://ddgksf2013.top/rewrite/XiaoHongShuAds.conf
+https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf
+https://ddgksf2013.top/rewrite/StartUpAds.conf
+https://gist.githubusercontent.com/RavelloH/68ed0626dae69a1ce7c8ad6887087ea1/raw/main.snippet
+https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/YoutubeAds.conf
+https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf
+
+# ---- 任务脚本 [task_local]（仅检查可访问性与非空） ----
+https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/streaming-ui-check.js
+https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/geo_location.js
+https://raw.githubusercontent.com/xream/scripts/main/surge/modules/network-info/net-lsp-x.js
+https://ddgksf2013.top/scripts/server-info-pure.js
