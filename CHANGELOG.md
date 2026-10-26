@@ -13,6 +13,14 @@
 
 <!-- 新的配置变更先写在这里，发布时改成日期标题 -->
 
+## 2026-10-26
+
+### 新增
+
+- `[filter_local]` 新增钱迹记账直连分组：`qianjiapp.com`、`xxoojoke.com`、
+  `litangkj.com`、`qianjibillimage.kodo-accelerate.cn-south-1.qiniucs.com`
+  （维护源 `config/filter_local.conf` 与 `profile/QX_Config.conf` 已同步）
+
 ## 2026-10-25
 
 ### 新增
