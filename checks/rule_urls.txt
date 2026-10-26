@@ -54,3 +54,4 @@ https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/streaming-
 https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/geo_location.js
 https://raw.githubusercontent.com/xream/scripts/main/surge/modules/network-info/net-lsp-x.js
 https://ddgksf2013.top/scripts/server-info-pure.js
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AppleIntelligence.list
