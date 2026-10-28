@@ -1,6 +1,6 @@
 # ============================================================
 # 规则健康检查 URL 清单
-# 更新日期：2026-10-25
+# 更新日期：2026-10-28
 #
 # 用法：
 # - 每行一个 URL，以 # 开头的行和空行会被忽略
@@ -36,6 +36,7 @@ https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWA
 # 本仓库自维护规则（托管在本仓库 rules/ 目录）
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Qianji.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/WeChatAdSettlement.list
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Xiaoyuzhou.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AI.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Longbridge.list
 

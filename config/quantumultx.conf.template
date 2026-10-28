@@ -1,6 +1,6 @@
 # ============================================================
 # Quantumult X 配置模板（不含任何真实凭据）
-# 更新日期：2026-10-25
+# 更新日期：2026-10-28
 #
 # 使用方法：
 # 1. 复制本模板，替换下方 {{占位符}} 后导入 Quantumult X
@@ -121,6 +121,7 @@ static = Final, proxy, direct, img-url = https://raw.githubusercontent.com/Kools
 # 个人直连例外
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Qianji.list, tag=Qianji, force-policy=direct, update-interval=86400, opt-parser=false, enabled=true
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/WeChatAdSettlement.list, tag=WeChatAdSettlement, force-policy=direct, update-interval=86400, opt-parser=false, enabled=true
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Xiaoyuzhou.list, tag=Xiaoyuzhou, force-policy=direct, update-interval=86400, opt-parser=false, enabled=true
 
 # 国内直连
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/China/China.list, tag = Mainland, force-policy = direct, update-interval = 604800, opt-parser = true, enabled = true
