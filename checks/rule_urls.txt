@@ -34,6 +34,8 @@ https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Quant
 # 广告规则 AWAvenue
 https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list
 # 本仓库自维护规则（托管在本仓库 rules/ 目录）
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Qianji.list
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/WeChatAdSettlement.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AI.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Longbridge.list
 

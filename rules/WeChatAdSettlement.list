@@ -1,0 +1,11 @@
+# 微信广告结算（本机验证的具体域名）
+HOST,mp.weixin.qq.com,no-policy
+HOST,res.wx.qq.com,no-policy
+HOST,wximg.qq.com,no-policy
+HOST,wxa.wxs.qq.com,no-policy
+HOST,file.daihuo.qq.com,no-policy
+HOST,badjs.weixinbridge.com,no-policy
+HOST,weheatmap.woa.com,no-policy
+HOST,report.url.cn,no-policy
+HOST,mmbiz.qpic.cn,no-policy
+HOST,mmbiz.qlogo.cn,no-policy

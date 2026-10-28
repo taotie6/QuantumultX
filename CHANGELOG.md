@@ -13,9 +13,10 @@
 
 ### Changed
 
-- `[filter_local]` 将“微信广告结算”从 16 条宽泛腾讯后缀直连，收窄为
-  10 条经本机 DevTools 验证的具体 `host` 直连，核心补充 `wxa.wxs.qq.com`；
-  维护源、主配置与模板三处已同步
+- 将“钱迹记账”和“微信广告结算”从 `[filter_local]` 迁移为
+  `rules/Qianji.list`、`rules/WeChatAdSettlement.list`，并接入 `[filter_remote]`；
+  微信广告结算仍保留 10 条经本机 DevTools 验证的具体域名，核心补充 `wxa.wxs.qq.com`
+- 同步维护源、主配置、模板与规则健康检查清单
 
 ## 2026-10-26
 
