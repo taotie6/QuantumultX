@@ -11,11 +11,16 @@
 
 ## [Unreleased]
 
+（空：结构性变更条目已归档至对应日期段落）
+
+## 2026-10-28
+
 ### Changed
 
 - 将“钱迹记账”和“微信广告结算”从 `[filter_local]` 迁移为
   `rules/Qianji.list`、`rules/WeChatAdSettlement.list`，并接入 `[filter_remote]`；
   微信广告结算仍保留 10 条经本机 DevTools 验证的具体域名，核心补充 `wxa.wxs.qq.com`
+- 新增 `rules/Xiaoyuzhou.list` 小宇宙直连分流
 - 同步维护源、主配置、模板与规则健康检查清单
 
 ## 2026-10-26
@@ -61,3 +66,4 @@
 | 日期 | 操作 | 结果 |
 | ---- | ---- | ---- |
 | 2026-10-25 | 建立维护流水线，生成规则清单并本地全量验证 | 35 项中除 ddgksf2013.top 的 3 项外全部通过；该站点对非浏览器客户端返回 302/异常（XiaoHongShuAds、StartUpAds、server-info-pure），疑似站点限制，待人工确认替代源；其余偶发失败为本机到 raw.githubusercontent.com 的网络抖动，CI 环境不受影响 |
+| 2026-11-11 | 深度维护：证据核对、AI.list 上游合并、AppleIntelligence 收窄、死规则清理、update-interval 对齐、语义审计脚本落地（`scripts/audit_rules.py`）。**证据来源**：钱迹 4 域=官方 VPN 帮助页（docs.qianjiapp.com/other/vpn_timeout.html）书面确认；小宇宙=软件许可协议明文域名 + 官网 og:audio 第一方引用 xyzcdn.net；长桥 8/9=各官网 + 官方帮助中心 longbridge/docs，lbtech.hk 经 HKIRC WHOIS/DNS/CT 三重确认未注册已删除；AppleIntelligence=Apple 官方 101555（smoot/guzzoni/apple-relay×3/cp4）+ curtinp118/Loon + bm7 issue #1598，app-measurement.com 确证为 Google Firebase 域名（归属错误）已移除。**上游 diff 结论**：VPSDance/ai-proxy-rules 为 MIT（署名合规），本地为上游严格子集，新增 20 条中合并 A 组 7 条 AI 专属 + B 组 2 条精确主机（api.cloudflare.com、storage.googleapis.com），11 条宽泛第三方规则不合并（含 IP-ASN,14061=DigitalOcean 全网段）；bm7 18 条路径全部存在（最近提交 2025-06~2026-10）、无失效 issue。**结构变更**：AppleIntelligence 26 条收窄为 9 条（苹果主域回落 Apple.list→Apple 策略组直连优先，Siri/PCC 端点保留走 AI）；Xiaoyuzhou 删 5 条死规则；AI.list 删 events.statsigapi.net 死规则；删除孤儿 rules/dandan.list；11 条 bm7 清单 update-interval 86400→604800（上游 ≥6 个月未更新）；rule_urls.txt 的 AppleIntelligence 从 [task_local] 区段移入 filter 区段。**探针表**：42/42 通过（含 apple.com→Apple、smoot→AppleIntelligence、midjourney/api.cloudflare.com/storage.googleapis.com→AI 等收窄与合并后的新预期）；遗留 WARN 1 项：AI.list 14 条（bytedance/microsoft/windows.net 系）被 China.list 的 HOST-KEYWORD,microsoft 等结构性遮蔽（含 copilot.microsoft.com→Mainland 直连），属上游间行为，按最小 diff 保留豁免。**可达性**：CI 全球视角、本机直连、本机走 QuantumultX（TUN）三视角均 36/39，3 项失败均为 ddgksf2013.top 存量问题（全球性失效，另案），无新增全球/大陆失败；探针域名连通性矩阵 11/11 可达且延迟特征符合分流预期。**真机验证**：待回填。**遗留问题**：① ddgksf2013.top 3 项全球失效待人工确认替代源；② AWAvenue issue #219（api.ad.xiaomi.com 误拦截）为上游内容问题；③ 本地/远程段 host 类内是否还有子分层待真机核对单第三项确认 |
