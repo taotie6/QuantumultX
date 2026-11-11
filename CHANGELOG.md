@@ -23,6 +23,7 @@
   当所选节点失效或 IP 被目标服务风控时整组无可切换的兜底策略
   （实测场景：新加坡节点出口被 OpenAI 拉黑，chatgpt.com/api.openai.com
   全部超时，而 claude.ai 正常）。`proxy` 指向默认代理，可在组内直接切换。
+  验证：用户重导配置后在 AI 组选中 `proxy`，chatgpt.com / muse.ai 恢复正常。
 
 ## 2026-10-28
 
