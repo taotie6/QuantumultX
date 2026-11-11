@@ -1,7 +1,14 @@
 # ===== AI Rules =====
 # Source: https://github.com/VPSDance/ai-proxy-rules
 # Upstream: rules/quantumult-x/global.list
-# Retrieved: 2026-10-26
+# License: MIT (upstream VPSDance/ai-proxy-rules)
+# Retrieved: 2026-11-11（2026-10-26 首次导入；2026-11-11 合并上游新增 9 条：
+#   midjourney.com / metaaiusercontent.com / grokbot.com / appsgenaiserver-pa.
+#   clients[6].google.com / appsgenaiserver-pa.googleapis.com /
+#   production-copilot-host-westus.webpubsub.azure.com / api.cloudflare.com /
+#   storage.googleapis.com。上游另有 11 条宽泛第三方规则（auth0/stripe/
+#   intercom/algolia/sentry/datadog/sift/openai 关键词、IP-ASN,14061=
+#   DigitalOcean 全网段）经评估未合并——见仓库维护记录）
 # Policy: overridden by force-policy=AI
 
 # Adobe Firefly / Core
@@ -115,6 +122,7 @@ HOST-SUFFIX,cline.bot,no-policy
 HOST-SUFFIX,clipdrop.co,no-policy
 
 # Cloudflare AI / Core
+HOST,api.cloudflare.com,no-policy
 HOST-SUFFIX,ai.cloudflare.com,no-policy
 
 # CodeRabbit / Core
@@ -148,6 +156,7 @@ HOST,browser-intake-datadoghq.com,no-policy
 HOST,copilot-proxy.githubusercontent.com,no-policy
 HOST,copilot-workspace.githubnext.com,no-policy
 HOST,copilotprodattachments.blob.core.windows.net,no-policy
+HOST,production-copilot-host-westus.webpubsub.azure.com,no-policy
 HOST,gateway.bingviz.microsoft.net,no-policy
 HOST,gateway.bingviz.microsoftapp.net,no-policy
 HOST,in.appcenter.ms,no-policy
@@ -159,7 +168,6 @@ HOST-SUFFIX,bing-shopping.microsoft-falcon.io,no-policy
 HOST-SUFFIX,challenges.cloudflare.com,no-policy
 HOST-SUFFIX,client-api.arkoselabs.com,no-policy
 HOST-SUFFIX,edgeservices.bing.com,no-policy
-HOST-SUFFIX,events.statsigapi.net,no-policy
 HOST-SUFFIX,featuregates.org,no-policy
 HOST-SUFFIX,identrust.com,no-policy
 HOST-SUFFIX,launchdarkly.com,no-policy
@@ -234,7 +242,10 @@ HOST-SUFFIX,notebooklm.google.com,no-policy
 HOST,alkalicore-pa.clients6.google.com,no-policy
 HOST,alkalimakersuite-pa.clients6.google.com,no-policy
 HOST,antigravity-pa.googleapis.com,no-policy
+HOST,appsgenaiserver-pa.clients.google.com,no-policy
+HOST,appsgenaiserver-pa.clients6.google.com,no-policy
 HOST,antigravity.googleapis.com,no-policy
+HOST,appsgenaiserver-pa.googleapis.com,no-policy
 HOST,cloudaicompanion.googleapis.com,no-policy
 HOST,cloudcode-pa.googleapis.com,no-policy
 HOST,daily-cloudcode-pa.googleapis.com,no-policy
@@ -242,6 +253,7 @@ HOST,geminiweb-pa.clients.google.com,no-policy
 HOST,geminiweb-pa.clients6.google.com,no-policy
 HOST,notebooklm-pa.googleapis.com,no-policy
 HOST,notebooklm.googleapis.com,no-policy
+HOST,storage.googleapis.com,no-policy
 HOST,webchannel-alkalimakersuite-pa.clients6.google.com,no-policy
 HOST-SUFFIX,aicode.googleapis.com,no-policy
 HOST-SUFFIX,aida.googleapis.com,no-policy
@@ -343,7 +355,11 @@ HOST-SUFFIX,llama.com,no-policy
 HOST-SUFFIX,llamameta.net,no-policy
 HOST-SUFFIX,meta.ai,no-policy
 HOST-SUFFIX,metaaivm.com,no-policy
+HOST-SUFFIX,metaaiusercontent.com,no-policy
 HOST-SUFFIX,muse.ai,no-policy
+
+# Midjourney / Core（2026-11-11 上游新增）
+HOST-SUFFIX,midjourney.com,no-policy
 
 
 # Mistral AI / Core
@@ -389,6 +405,7 @@ HOST-SUFFIX,oaistatsig.com,no-policy
 HOST-SUFFIX,openai.com.cdn.cloudflare.net,no-policy
 HOST-SUFFIX,openai.org,no-policy
 HOST-SUFFIX,turn.livekit.cloud,no-policy
+
 
 # OpenArt / Core
 HOST-SUFFIX,openart.ai,no-policy
@@ -482,6 +499,7 @@ HOST-SUFFIX,windsurf.com,no-policy
 # xAI / Core
 HOST-SUFFIX,grok.com,no-policy
 HOST-SUFFIX,grok.x.com,no-policy
+HOST-SUFFIX,grokbot.com,no-policy
 HOST-SUFFIX,grokipedia.com,no-policy
 HOST-SUFFIX,x.ai,no-policy
 
