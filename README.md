@@ -50,7 +50,6 @@ QuantumultX/
 ├── rules/                             # 自维护规则文件（经本仓库 raw 地址远程引用）
 │   ├── AI.list                        # AI 服务规则
 │   ├── AppleIntelligence.list         # 苹果智能服务规则
-│   ├── dandan.list                    # 蛋蛋不语规则
 │   └── Longbridge.list                # 长桥证券代理规则
 └── icons/                             # 策略图标
 ```
