@@ -1,28 +1,37 @@
-# Apple Intelligence 规则集
+# ============================================================
+# Apple Intelligence / Siri / Private Cloud Compute 规则
+# Source: https://support.apple.com/en-us/101555
+#         （Apple 官方《Use Apple products on enterprise networks》
+#          "Apple Intelligence, Siri, and Search" 章节，2026-08-07 更新：
+#          guzzoni.apple.com、*.smoot.apple.com、apple-relay.apple.com、
+#          apple-relay.fastly-edge.com、apple-relay.cloudflare.com、
+#          cp4.cloudflare.com 均为官方逐主机列出的用途域）
+#         apple-relay.akamaized.net / apple-relay.mask.apple-dns.net：
+#         社区来源（blackmatrix7/ios_rule_script issue #1598、
+#         hagezi/dns-blocklists apple-private-relay.txt）；
+#         DNS 证实 apple-relay.apple.com CNAME → apple-relay.mask.apple-dns.net
+#         apple-wit：社区前瞻关键字（curtinp118/Loon、7ohnkuu/quantx 收录；
+#         当前 DNS 无解析，保留作前瞻匹配）
+# Upstream: https://github.com/curtinp118/Loon (rules/AppleIntelligence.list)
+#           https://github.com/blackmatrix7/ios_rule_script/issues/1598
+# Retrieved: 2026-11-11
+# Policy: overridden by force-policy=AI
+# 范围说明（2026-11-11 收窄）：仅保留 AI/Siri/PCC 专属域；
+# 苹果生态主域（apple.com/icloud.com/me.com 等）交由上游
+# blackmatrix7 Apple.list 处理（Apple 策略组，直连优先）；
+# app-measurement.com 实为 Google Firebase Analytics 域名（归属错误）已移除；
+# apple-livephotos.com 官方域名为 apple-livephotoskit.com（已在 Apple.list）。
+# ============================================================
 
+# Apple Intelligence / Siri / Search（官方 101555）
 HOST-KEYWORD,apple-wit,no-policy
-HOST-SUFFIX,app-measurement.com,no-policy
-HOST-SUFFIX,apple-cloudkit.com,no-policy
-HOST-SUFFIX,apple-livephotos.com,no-policy
-HOST-SUFFIX,apple.com,no-policy
-HOST-SUFFIX,apple.com.cn,no-policy
-HOST-SUFFIX,icloud-content.com,no-policy
-HOST-SUFFIX,icloud.com,no-policy
-HOST-SUFFIX,icloud.com.cn,no-policy
-HOST-SUFFIX,itunes.apple.com,no-policy
-HOST-SUFFIX,me.com,no-policy
-HOST-SUFFIX,mzstatic.com,no-policy
-HOST,p67-keyvalueservice.icloud.com,no-policy
-HOST,api.apple-cloudkit.com,no-policy
-HOST,api.smoot.apple.com,no-policy
-HOST,binary-blob-repository.apple.com,no-policy
-HOST,guzzoni.apple.com,no-policy
-HOST,p106-keyvalueservice.icloud.com,no-policy
 HOST-SUFFIX,smoot.apple.com,no-policy
-HOST-SUFFIX,gateway.icloud.com,no-policy
+HOST,guzzoni.apple.com,no-policy
+
+# Private Cloud Compute / Apple Intelligence Extensions（官方 101555 + 社区补充）
 HOST-SUFFIX,apple-relay.apple.com,no-policy
 HOST-SUFFIX,apple-relay.fastly-edge.com,no-policy
 HOST-SUFFIX,apple-relay.cloudflare.com,no-policy
-HOST-SUFFIX,cp4.cloudflare.com,no-policy
 HOST-SUFFIX,apple-relay.akamaized.net,no-policy
 HOST-SUFFIX,apple-relay.mask.apple-dns.net,no-policy
+HOST-SUFFIX,cp4.cloudflare.com,no-policy
