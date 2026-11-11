@@ -13,6 +13,17 @@
 
 （空：结构性变更条目已归档至对应日期段落）
 
+## 2026-11-12
+
+### Changed
+
+- `[policy]` 为 AI / YouTube / Telegram / Netflix 四个策略组补充内置 `proxy`
+  候选（三处同步：`config/policy.conf`、`profile/QX_Config.conf`、
+  `config/quantumultx-template`）。原因：四组候选仅有地区组与 dest-hash，
+  当所选节点失效或 IP 被目标服务风控时整组无可切换的兜底策略
+  （实测场景：新加坡节点出口被 OpenAI 拉黑，chatgpt.com/api.openai.com
+  全部超时，而 claude.ai 正常）。`proxy` 指向默认代理，可在组内直接切换。
+
 ## 2026-10-28
 
 ### Changed
