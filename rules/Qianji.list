@@ -1,4 +1,14 @@
-# 钱迹记账
+# ============================================================
+# 钱迹记账直连规则
+# Source: https://docs.qianjiapp.com/other/vpn_timeout.html
+#         （钱迹官方用户指南《手机安装 VPN 后无法访问服务器》，页面以
+#           DOMAIN-SUFFIX 直连规则形式书面列出下列全部四个域名）
+#         旁证：https://www.qianjiapp.com/（官网页脚：
+#           西安李唐科技有限公司，陕ICP备2020017332号-2）
+# Retrieved: 2026-11-11
+# Policy: overridden by force-policy=direct
+# ============================================================
+
 HOST-SUFFIX,qianjiapp.com,no-policy
 HOST-SUFFIX,xxoojoke.com,no-policy
 HOST-SUFFIX,litangkj.com,no-policy

@@ -1,4 +1,16 @@
-# 长桥证券 / Longbridge & LongPort
+# ============================================================
+# 长桥证券 / Longbridge & LongPort 直连规则
+# Source: 各域名官网直接验证（longbridge.com / longbridgeapp.com /
+#         longportapp.com / longbridge.sg / longbridge.hk /
+#         longbridge.global / longportwhale.com）；
+#         longbridge-inc.com：官方帮助中心
+#         https://github.com/longbridge/docs（反欺诈页列为官方邮箱域，
+#         网络诊断页引用 detect.longbridge-inc.com）
+# Retrieved: 2026-11-11
+# Policy: overridden by force-policy=proxy
+# 变更说明（2026-11-11）：删除 lbtech.hk（HKIRC WHOIS 未注册、
+# 公共 DNS NXDOMAIN、证书透明度日志零记录，确属死域名）。
+# ============================================================
 
 # 官方网站与主域名
 HOST-SUFFIX,longbridge.com,no-policy
@@ -10,7 +22,6 @@ HOST-SUFFIX,longbridge.global,no-policy
 
 # 后端 API、行情数据及 OpenAPI 域名
 HOST-SUFFIX,longbridge-inc.com,no-policy
-HOST-SUFFIX,lbtech.hk,no-policy
 HOST-SUFFIX,longportwhale.com,no-policy
 
 # 备用关键字匹配（用于拦截可能遗漏的子域名）

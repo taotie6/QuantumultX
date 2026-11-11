@@ -1,8 +1,14 @@
-# 小宇宙（Xiaoyuzhou FM）
+# ============================================================
+# 小宇宙（Xiaoyuzhou FM）直连规则
+# Source: https://post.xiaoyuzhoufm.com/podcast-agreement/
+#         （《小宇宙软件许可及服务协议》1.4 条明文：
+#           "移动网站（域名：xiaoyuzhoufm.com）"）
+#         xyzcdn.net：官网 episode 页 og:audio 与图片第一方引用
+#         （media.xyzcdn.net / image.xyzcdn.net，2026-11-11 实测可用）
+# Retrieved: 2026-11-11
+# Policy: overridden by force-policy=direct
+# 运营方：宁波追光网络科技有限公司（即刻团队）
+# ============================================================
+
 HOST-SUFFIX,xiaoyuzhoufm.com,no-policy
-HOST-SUFFIX,api.xiaoyuzhoufm.com,no-policy
-HOST-SUFFIX,static.xiaoyuzhoufm.com,no-policy
-HOST-SUFFIX,blog.xiaoyuzhoufm.com,no-policy
-HOST-SUFFIX,blog-static.xiaoyuzhoufm.com,no-policy
 HOST-SUFFIX,xyzcdn.net,no-policy
-HOST-SUFFIX,media.xyzcdn.net,no-policy
