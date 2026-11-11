@@ -38,6 +38,7 @@ https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Qianji.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/WeChatAdSettlement.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Xiaoyuzhou.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AI.list
+https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AppleIntelligence.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Longbridge.list
 
 # ---- 远程重写规则 [rewrite_remote] ----
@@ -57,4 +58,3 @@ https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/streaming-
 https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/geo_location.js
 https://raw.githubusercontent.com/xream/scripts/main/surge/modules/network-info/net-lsp-x.js
 https://ddgksf2013.top/scripts/server-info-pure.js
-https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AppleIntelligence.list
