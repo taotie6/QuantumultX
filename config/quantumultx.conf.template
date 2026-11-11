@@ -134,25 +134,25 @@ https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/Longbridge.list
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AI.list, tag=AI, force-policy=AI, update-interval=172800, opt-parser=true, enabled=true
 https://raw.githubusercontent.com/taotie6/QuantumultX/main/rules/AppleIntelligence.list, tag=AppleIntelligence, force-policy=AI, update-interval=172800, opt-parser=true, enabled=true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list, tag = Apple, force-policy = Apple, update-interval = 604800, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list, tag = Google, force-policy = Google, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Microsoft/Microsoft.list, tag = Microsoft, force-policy = Microsoft, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/PayPal/PayPal.list, tag = PayPal, force-policy = PayPal, update-interval = 86400, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list, tag = Google, force-policy = Google, update-interval = 604800, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Microsoft/Microsoft.list, tag = Microsoft, force-policy = Microsoft, update-interval = 604800, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/PayPal/PayPal.list, tag = PayPal, force-policy = PayPal, update-interval = 604800, opt-parser = false, enabled = true
 
 # 流媒体
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list, tag = Netflix, force-policy = Netflix, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list, tag = YouTube, force-policy = YouTube, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list, tag = Spotify, force-policy = Spotify, update-interval = 86400, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list, tag = Netflix, force-policy = Netflix, update-interval = 604800, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list, tag = YouTube, force-policy = YouTube, update-interval = 604800, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list, tag = Spotify, force-policy = Spotify, update-interval = 604800, opt-parser = false, enabled = true
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GlobalMedia/GlobalMedia.list, tag = GlobalMedia, force-policy = GlobalMedia, update-interval = 86400, opt-parser = true, enabled = true
 
 # 通讯社交
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list, tag = Telegram, force-policy = Telegram, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list, tag=Twitter, force-policy=X, update-interval=86400, opt-parser=false, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list, tag = Telegram, force-policy = Telegram, update-interval = 604800, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list, tag=Twitter, force-policy=X, update-interval=604800, opt-parser=false, enabled=true
 
 # 游戏平台
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Steam/Steam.list, tag = Steam, force-policy = Gamer, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Epic/Epic.list, tag = Epic, force-policy = Gamer, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Sony/Sony.list, tag = Sony, force-policy = Gamer, update-interval = 86400, opt-parser = false, enabled = true
-https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Nintendo/Nintendo.list, tag = Nintendo, force-policy = Gamer, update-interval = 86400, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Epic/Epic.list, tag = Epic, force-policy = Gamer, update-interval = 604800, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Sony/Sony.list, tag = Sony, force-policy = Gamer, update-interval = 604800, opt-parser = false, enabled = true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Nintendo/Nintendo.list, tag = Nintendo, force-policy = Gamer, update-interval = 604800, opt-parser = false, enabled = true
 
 # 代理名单 & 广告
 https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Global/Global.list, tag = Outside, force-policy = proxy, update-interval = 86400, opt-parser = true, enabled = true
