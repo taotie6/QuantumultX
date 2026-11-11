@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""远程分流规则语义审计脚本。
+"""远程分流规则语义审计脚本（v2，真机裁决修正版）。
 
 模拟 Quantumult X 的分流匹配语义，对 [filter_remote] 全部远程清单做四类检查，
 并输出探针表：
 
-  语义模型（依据官方 sample.conf 与社区文档，详见
+  语义模型（官方 sample.conf + 社区文档 + 2026-11-11 真机实测裁决，详见
   .trellis/tasks/11-10-remote-rules-deep-maintenance/research/qx-official-semantics.md）：
-  1. host 类规则（host/host-suffix/host-keyword/host-wildcard）：
-     [filter_local] 按行序 → [filter_remote] 各资源按声明顺序、资源内按行序，
-     首个命中即停；
+  1. host 类"最具体优先"（跨清单生效）：host 精确层 → host-suffix 层
+     （value 最长者赢，等长取"本地→远程清单声明序→行序"首个）→
+     host-wildcard 层 → host-keyword 层；
   2. host 类未命中才做 DNS 解析，随后评估 IP 类规则
      （ip-cidr/ip6-cidr/geoip）：本地 → 远程，按序；
   3. 都未命中走本地 final 兜底（本地 final 不短路远程链）。
@@ -18,8 +18,10 @@
 四类检查：
   A. force-policy 引用但 [policy] 不存在的策略组（FAIL）
   B. CIDR 掩码 / IP-ASN / IDN（非 ASCII 域名）格式错误（FAIL）
-  C. 同清单内永不可达的死规则（自维护清单 FAIL，上游清单 INFO）
-  D. 跨清单遮蔽（自维护清单意图被击败 WARN；上游间/同策略冗余 INFO）
+  C. 同清单内永不可达的死规则（最具体优先语义下仅"类型+值完全相同的
+     重复条目"不可达；自维护清单 FAIL，上游清单 INFO）
+  D. 跨清单接管（同值重复自维护清单 FAIL；子域接管：自维护清单被
+     更具体规则接管且策略不同 WARN，其余 INFO）
 
 另含：探针表（≥30 代表性域名 → 预期策略 vs 实际命中）、
 三处同步检查（config/filter_remote.conf / profile/QX_Config.conf /
@@ -350,7 +352,12 @@ class Engine(object):
         self.resolver = resolver
 
     def match(self, probe):
-        """probe 为域名或 IP 字符串，返回 (命中描述, 规则, unresolved)。"""
+        """probe 为域名或 IP 字符串，返回 (命中描述, 规则, unresolved)。
+
+        host 类采用真机裁决修正的"最具体优先"模型（见 research/
+        qx-official-semantics.md §4）：host 精确层 → host-suffix 层
+        （value 最长者赢，等长取"本地→清单序→行序"首个）→ host-wildcard
+        层 → host-keyword 层。"""
         try:
             ip = ipaddress.ip_address(probe)
             host = None
@@ -358,24 +365,60 @@ class Engine(object):
             ip, host = None, probe.lower()
 
         if host is not None:
-            for rule in self.local_rules:
-                if rule.rtype in HOST_TYPES and rule_matches_host(rule, host):
-                    return "local({},{})".format(rule.rtype, rule.value), rule, False
-            for tag, rules in self.remote_lists:
-                for rule in rules:
-                    if rule.rtype in HOST_TYPES and rule_matches_host(rule, host):
-                        return "{}(line {},{})".format(tag, rule.lineno,
-                                                       rule.rtype + "," + rule.value), rule, False
+            hit = self._match_host(host)
+            if hit:
+                return hit
         else:
-            ip_phase_only = True
-            if ip_phase_only:
-                return self._match_ip(str(ip), ip)
+            return self._match_ip(str(ip), ip)
         # host 未命中 → 解析后进入 IP 相
         resolved = self.resolver(host) if host else None
         if resolved is None:
             return "未解析(跳过 IP 相)", None, True
         ip_obj = ipaddress.ip_address(resolved)
         return self._match_ip(host + "→" + resolved, ip_obj)
+
+    def _match_host(self, host):
+        """按类型层级（host > suffix(长优先) > wildcard > keyword）匹配。
+        返回 (描述, 规则, False) 或 None。"""
+        def scan(rtype):
+            """该类型层内收集命中：返回 [(order, rule)]，order 为声明序。"""
+            hits = []
+            for rule in self.local_rules:  # 本地最先
+                if rule.rtype == rtype and rule_matches_host(rule, host):
+                    hits.append((-1, rule))
+            for idx, (tag, rules) in enumerate(self.remote_lists):
+                for rule in rules:
+                    if rule.rtype == rtype and rule_matches_host(rule, host):
+                        hits.append((idx, rule))
+            return hits
+
+        # host 精确层：命中即停（等价规则取声明序首个）
+        hits = scan("host")
+        if hits:
+            _, rule = hits[0]
+            return self._desc(rule), rule, False
+        # host-suffix 层：更长 value 更具体
+        hits = scan("host-suffix")
+        if hits:
+            _, rule = max(hits, key=lambda h: (len(h[1].value), -h[0]))
+            return self._desc(rule), rule, False
+        # host-wildcard 层：取声明序首个
+        hits = scan("host-wildcard")
+        if hits:
+            _, rule = hits[0]
+            return self._desc(rule), rule, False
+        # host-keyword 层：取声明序首个
+        hits = scan("host-keyword")
+        if hits:
+            _, rule = hits[0]
+            return self._desc(rule), rule, False
+        return None
+
+    def _desc(self, rule):
+        if rule.source == "filter_local":
+            return "local({},{})".format(rule.rtype, rule.value)
+        return "{}(line {},{})".format(rule.source, rule.lineno,
+                                       rule.rtype + "," + rule.value)
 
     def _match_ip(self, desc, ip_obj):
         for rule in self.local_rules:
@@ -400,131 +443,79 @@ class Engine(object):
 
 # ------------------------------------------------------- 遮蔽与死规则 --
 
-class CoverageIndex(object):
-    """前缀索引：判断某 host 类规则是否被一组更早的规则完全覆盖。"""
-
-    def __init__(self):
-        self.suffixes = set()
-        self.hosts = set()
-        self.keywords = []            # 子串过滤
-        self.wild_prefix = {}         # 首段字面量 → [regex]（head 非空，按前缀桶索引）
-        self.wild_free = []           # head 为空的通配符（*.x 等，数量少，线性匹配）
-
-    def add(self, rule):
-        t, v = rule.rtype, rule.value.lower()
-        if t == "host-suffix":
-            self.suffixes.add(v)
-        elif t == "host":
-            self.hosts.add(v)
-        elif t == "host-keyword":
-            self.keywords.append(v)
-        elif t == "host-wildcard":
-            head = re.split(r"[*?]", rule.value, 1)[0].lower()
-            if head:
-                self.wild_prefix.setdefault(head, []).append(wildcard_to_regex(rule.value))
-            else:
-                self.wild_free.append(wildcard_to_regex(rule.value))
-
-    def covers(self, rule):
-        """rule 的匹配集是否被索引完全覆盖（保守近似）。"""
-        t, v = rule.rtype, rule.value.lower()
-        if t == "host":
-            return (v in self.hosts
-                    or self._suffix_cover(v)
-                    or self._keyword_hit(v)
-                    or self._wildcard_hit(v))
-        if t == "host-suffix":
-            return self._suffix_cover(v) or self._keyword_hit(v)
-        if t == "host-keyword":
-            # 关键词 v 被更早关键词 k 覆盖 ⇔ k 是 v 的子串
-            return any(k in v for k in self.keywords)
-        if t == "host-wildcard":
-            # 用代表性样本近似：所有样本都被覆盖才算覆盖
-            for repl in ("www", "a", "x9z", "sub.domain"):
-                sample = rule.value.replace("*", repl).replace("?", "x").strip(".")
-                if not self._host_covered(sample.lower()):
-                    return False
-            return True
-        return False
-
-    def _keyword_hit(self, v):
-        return any(k in v for k in self.keywords)
-
-    def _wildcard_hit(self, v):
-        # 前缀桶：域名长度 ≤ ~60，逐前缀查集合即可命中 head 非空的通配符
-        for i in range(1, min(len(v), 64) + 1):
-            bucket = self.wild_prefix.get(v[:i])
-            if bucket:
-                for rx in bucket:
-                    if rx.match(v):
-                        return True
-        for rx in self.wild_free:
-            if rx.match(v):
-                return True
-        return False
-
-    def _suffix_cover(self, v):
-        parts = v.split(".")
-        for i in range(len(parts) - 1):
-            if ".".join(parts[i:]) in self.suffixes:
-                return True
-        return v in self.suffixes
-
-    def _host_covered(self, h):
-        return (h in self.hosts or self._suffix_cover(h)
-                or self._keyword_hit(h)
-                or self._wildcard_hit(h))
-
-
-def build_list_index(rules):
-    idx = CoverageIndex()
-    for rule in rules:
-        if rule.rtype in HOST_TYPES:
-            idx.add(rule)
-    return idx
-
-
 def find_cross_list_shadow(remote_lists, force_policies):
-    """跨清单遮蔽：每条规则只对"此前全部清单"的合并索引测一次，命中后
-    再回溯归属到最早覆盖它的单个清单（避免 12 万条规则 × 24 索引的重复匹配）。
-    返回 [(earlier_tag, later_tag, rule, 同策略)]。"""
-    shadowed = []
-    per_list_idx = [build_list_index(rules) for _tag, rules in remote_lists]
-    merged = CoverageIndex()
+    """跨清单接管分析（真机裁决修正版）：QX host 类为"最具体优先"，
+    完全遮蔽的概念不复存在。改报两类：
+    - exact-dup：HOST,v 与更早清单 HOST,v 完全重复（后者永不可达）
+    - subdomain：SUFFIX,v 的子域被任意清单更具体规则（精确 HOST 或
+      更长 SUFFIX）接管（子域级冲突，不影响 v 自身与多数子域）
+    返回 [(winner_tag, loser_tag, rule, 同策略, kind)]。"""
+    # children[parent] = (kind, value, list_idx, rule)；kind: 'host'/'suffix'
+    # exact_hosts[value] = (list_idx, tag, rule)：HOST 精确值索引
+    children = {}
+    exact_hosts = {}
+    tags = []
+    for idx, (tag, rules) in enumerate(remote_lists):
+        tags.append(tag)
+        for rule in rules:
+            v = rule.value.lower()
+            if rule.rtype == "host":
+                kind = "host"
+                exact_hosts.setdefault(v, (idx, tag, rule))
+            elif rule.rtype == "host-suffix":
+                kind = "suffix"
+            else:
+                continue
+            parts = v.split(".")
+            for i in range(len(parts) - 1):
+                parent = ".".join(parts[i + 1:])
+                children.setdefault(parent, []).append((kind, v, idx, rule))
+    result = []
     for j, (tag, rules) in enumerate(remote_lists):
         for rule in rules:
-            if rule.rtype not in HOST_TYPES:
-                continue
-            if not merged.covers(rule):
-                continue
-            # 命中：回溯最早的覆盖清单（只对被遮蔽的少数规则做）
-            for i in range(j):
-                if per_list_idx[i].covers(rule):
-                    shadowed.append((remote_lists[i][0], tag, rule,
-                                     force_policies.get(remote_lists[i][0])
-                                     == force_policies.get(tag)))
-                    break
-        # 合并本清单进累计索引
-        for rule in rules:
-            if rule.rtype in HOST_TYPES:
-                merged.add(rule)
-    return shadowed
+            v = rule.value.lower()
+            if rule.rtype == "host":
+                # 完全重复：更早清单同值 HOST
+                if v in exact_hosts and exact_hosts[v][0] < j:
+                    idx, wtag, _r = exact_hosts[v]
+                    result.append((wtag, tag, rule,
+                                   force_policies.get(wtag) == force_policies.get(tag),
+                                   "exact-dup"))
+            elif rule.rtype == "host-suffix":
+                # 子域接管：任意清单（含更晚）的 HOST,w（w==v 或 w 以 .v 结尾）
+                # 或更长 SUFFIX,w（w 以 .v 结尾）
+                best = None
+                for kind, w, idx, r in children.get(v, []):
+                    if kind == "host" and (w == v or w.endswith("." + v)):
+                        cand = (0, idx, kind, w)   # HOST 层级最高
+                    elif kind == "suffix" and w.endswith("." + v):
+                        cand = (1, idx, kind, w)
+                    else:
+                        continue
+                    if best is None or cand[:2] < best[:2]:
+                        best = cand
+                if best:
+                    wtag = tags[best[1]]
+                    result.append((wtag, tag, rule,
+                                   force_policies.get(wtag) == force_policies.get(tag),
+                                   "subdomain"))
+    return result
 
 
 
 def find_intra_list_dead(rules, tag):
-    """同清单内死规则：返回 [(rule, 覆盖者描述)]。"""
-    index = CoverageIndex()
+    """同清单内死规则（真机裁决修正版）：最具体优先语义下，不同长度的
+    SUFFIX 互不覆盖、KEYWORD 不覆盖 SUFFIX——仅"类型+值完全相同的更早
+    条目（重复）"才永不可达。返回 [(rule, 覆盖者描述)]。"""
     dead = []
     seen = {}
     for rule in rules:
         if rule.rtype in HOST_TYPES:
-            if index.covers(rule):
-                dead.append((rule, "同清单更早规则"))
-            elif (rule.rtype, rule.value.lower()) in seen:
-                dead.append((rule, "与第 {} 行重复".format(seen[(rule.rtype, rule.value.lower())])))
-            seen.setdefault((rule.rtype, rule.value.lower()), rule.lineno)
-            index.add(rule)
+            key = (rule.rtype, rule.value.lower())
+            if key in seen:
+                dead.append((rule, "与第 {} 行重复".format(seen[key])))
+            else:
+                seen[key] = rule.lineno
     return dead
 
 
@@ -588,8 +579,8 @@ PROBES = [
     ("www.midjourney.com", "AI", "2026-11-11 合并上游 A 组新增"),
     ("api.cloudflare.com", "AI", "2026-11-11 合并上游 B 组新增（exact-host）"),
     ("storage.googleapis.com", "AI", "2026-11-11 合并上游 B 组新增（exact-host）"),
-    ("copilot.microsoft.com", "Mainland",
-     "已知遮蔽：China.list HOST-KEYWORD,microsoft 先于 AI.list 命中，维持现状"),
+    ("copilot.microsoft.com", "Outside",
+     "真机证实：Global.list 精确 HOST,copilot.microsoft.com（host 层级最高），维持现状"),
     # 流媒体
     ("www.netflix.com", "Netflix", ""),
     ("www.youtube.com", "YouTube", ""),
@@ -600,12 +591,14 @@ PROBES = [
     ("x.com", "Twitter", ""),
     # 广告
     ("1rtb.com", "Ads", ""),
-    ("a.market.xiaomi.com", "Mainland",
-     "已知遮蔽：China.list HOST-SUFFIX,xiaomi.com 先于 AWAvenue，维持现状"),
+    ("a.market.xiaomi.com", "Ads",
+     "真机语义（最长 SUFFIX 优先）：AWAvenue 的 a.market.xiaomi.com 赢过 China.list 的 xiaomi.com"),
+    ("proxima.midjourney.com", "Advertising",
+     "真机证实：Advertising.list 更长 SUFFIX 接管 midjourney 统计子域"),
     ("doubleclick.net", "Google", ""),
     # 个人直连例外
     ("mp.weixin.qq.com", "WeChatAdSettlement", ""),
-    ("weheatmap.woa.com", "WeChatAdSettlement", "该清单唯一不被 Mainland/WeChat 同效覆盖的域名"),
+    ("weheatmap.woa.com", "WeChatAdSettlement", "HOST 精确层级赢过 Mainland/WeChat 的 SUFFIX（真机语义）"),
     ("xiaoyuzhoufm.com", "Xiaoyuzhou", ""),
     ("media.xyzcdn.net", "Xiaoyuzhou", "2026-11-11 删除死规则后由 xyzcdn.net 覆盖"),
     ("docs.qianjiapp.com", "Qianji", ""),
@@ -795,21 +788,25 @@ def main(argv=None):
             else:
                 infos.append(entry)
 
-    # ---- 检查 4：跨清单遮蔽 ----
+    # ---- 检查 4：跨清单接管（真机语义：最具体优先）----
     shadowed = find_cross_list_shadow(remote_lists, force_policies)
     agg = {}
-    for etag, ltag, rule, same in shadowed:
-        agg.setdefault((etag, ltag, same), []).append(rule)
-    for (etag, ltag, same), rules in sorted(agg.items()):
+    for wtag, ltag, rule, same, kind in shadowed:
+        agg.setdefault((wtag, ltag, same, kind), []).append(rule)
+    for (wtag, ltag, same, kind), rules in sorted(agg.items()):
         n = len(rules)
         samples = ", ".join(r.raw for r in rules[:3])
-        if ltag in SELF_TAGS and not same:
-            warnings.append("遮蔽[{}→{} 策略不同]: {} 条（如 {}）—— 自维护清单意图被击败"
-                            .format(etag, ltag, n, samples))
+        label = "同值重复" if kind == "exact-dup" else "子域接管"
+        if kind == "exact-dup" and ltag in SELF_TAGS:
+            failures.append("跨清单同值重复[{}→{}] line {}: {} —— 更早清单同值 HOST 优先，本条永不可达"
+                            .format(wtag, ltag, rules[0].lineno, rules[0].raw))
+        elif ltag in SELF_TAGS and not same:
+            warnings.append("{}[{}→{} 策略不同]: {} 条（如 {}）—— 自维护清单子域被接管"
+                            .format(label, wtag, ltag, n, samples))
         elif same:
-            infos.append("遮蔽[{}→{} 同策略冗余]: {} 条（如 {}）".format(etag, ltag, n, samples))
+            infos.append("{}[{}→{} 同策略]: {} 条（如 {}）".format(label, wtag, ltag, n, samples))
         else:
-            infos.append("遮蔽[{}→{} 策略不同]: {} 条（如 {}）".format(etag, ltag, n, samples))
+            infos.append("{}[{}→{} 策略不同]: {} 条（如 {}）".format(label, wtag, ltag, n, samples))
 
     # ---- 探针表 ----
     cn_networks = load_cn_networks(args.timeout, fresh=args.fresh, offline=args.offline)
