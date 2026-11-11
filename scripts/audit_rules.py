@@ -343,7 +343,7 @@ def rule_matches_ip(rule, ip, cn_networks):
 
 
 class Engine(object):
-    """匹配引擎：local host 规则 → 远程清单（声明序）→ IP 相 → 本地 final。"""
+    """匹配引擎（v2）：host 类最具体优先（_match_host）→ IP 相 → 本地 final。"""
 
     def __init__(self, local_rules, remote_lists, cn_networks, resolver):
         self.local_rules = local_rules        # [Rule]
@@ -822,8 +822,6 @@ def main(argv=None):
     passed = failed = skipped = 0
     for probe, expected, note in probes:
         actual, rule, unresolved = engine.match(probe)
-        tag_only = actual.split("(")[0] if actual and not actual.startswith("local") \
-            else ("local:" + actual[6:actual.index(",")] if actual.startswith("local(") and "," in actual else actual)
         if unresolved:
             status, mark = "SKIP", "跳"
             skipped += 1

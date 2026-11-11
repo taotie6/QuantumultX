@@ -41,9 +41,10 @@ QuantumultX/
 │   ├── filter_local.conf              # [filter_local] 个人例外规则维护源
 │   └── dns.conf                       # [dns] DNS 配置维护源
 ├── checks/
-│   └── rule_urls.txt                  # 规则健康检查 URL 清单（35 项）
+│   └── rule_urls.txt                  # 规则健康检查 URL 清单（39 项）
 ├── scripts/
 │   ├── check_rules.py                 # 规则健康检查脚本
+│   ├── audit_rules.py                 # 分流语义审计脚本（最具体优先模型 + 探针表）
 │   └── *.conf                         # 脚本模块配置（引用 taotie6/scripts 或上游脚本源）
 ├── .github/workflows/
 │   └── check-rules.yml                # 每周定时健康检查，失败自动建 Issue
@@ -179,7 +180,7 @@ Quantumult X 的「下载配置」主要用于首次导入或重新覆盖整份�
 远程规则 URL 失效（上游文件移动、站点限制、格式变化）是最容易被忽略的故障。本仓库用 GitHub Actions 自动盯防：
 
 - **检查内容**：HTTP 200、内容非空、非 HTML 劫持页、按扩展名的简单格式校验（`.list` 校验分流规则语法，兼容 Surge 风格前缀；`.conf`/`.snippet` 校验重写语法）；连接级错误自动重试 2 次
-- **检查范围**：`checks/rule_urls.txt` 中的 35 项远程资源（分流规则、重写规则、任务脚本），与主配置引用保持同步
+- **检查范围**：`checks/rule_urls.txt` 中的 39 项远程资源（分流规则、重写规则、任务脚本），与主配置引用保持同步
 - **运行节奏**：每周一 09:00（北京时间）自动运行；也可在 Actions 页面手动触发（`workflow_dispatch`）
 - **失败通知**：自动创建（或向已有未关闭 Issue 追加评论）`[自动化] 规则健康检查失败` Issue；GitHub 同时会向仓库所有者发送失败邮件
 - **权限**：仅使用最小权限 `GITHUB_TOKEN`（读内容 + 写 Issue），无跨仓库令牌
@@ -191,6 +192,17 @@ python3 scripts/check_rules.py
 # 指定清单与超时
 python3 scripts/check_rules.py --file checks/rule_urls.txt --timeout 30
 ```
+
+语义审计（遮蔽/死规则/force-policy/格式 + 探针表 + 三处同步检查）：
+
+```bash
+python3 scripts/audit_rules.py              # 退出码 0 即无 FAIL
+python3 scripts/audit_rules.py --device-checklist   # 真机核对单
+```
+
+注意：QX host 类匹配为「最具体优先」（精确 HOST > 更长 HOST-SUFFIX >
+HOST-KEYWORD，跨清单生效），探针表与接管报告均按此语义计算；
+清单顺序只在同类型同长度平局时起作用（2026-11-11 真机实测确认）。
 
 新增/删除远程资源时，记得同步修改 `checks/rule_urls.txt`。注意：检查通过只代表 URL 可用且格式正确，分流行为仍需在 Quantumult X 客户端验证。
 
